@@ -1,0 +1,7 @@
+out/
+.bsp
+.idea
+
+### Scala template
+*.class
+*.log
