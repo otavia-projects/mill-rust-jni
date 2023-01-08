@@ -141,7 +141,7 @@ class JavaJNI {
 
     public static native int add(int a, int b);
 
-    public static native void plus(int term);
+    public native void plus(int term);
 
 }
 
@@ -165,7 +165,7 @@ pub unsafe extern "C" fn Java_com_github_example_Adder_plus(env: JNIEnv, this: j
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_JavaJNI_add(env: JNIEnv, this: jobject, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_com_github_example_JavaJNI_add(env: JNIEnv, clz: jclass, a: jint, b: jint) -> jint {
     todo!()
 }
 
