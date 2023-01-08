@@ -1,9 +1,33 @@
+/*
+ * Copyright 2023 Yan Kun <yan_kun_1992@foxmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This file is fork from sbt-jni(https://github.com/sbt/sbt-jni) under
+ * BSD-3-Clause license.
+ */
+
 package io.otavia.jni.loader
 
 import java.nio.file.{Files, Path}
 import scala.collection.mutable
 import scala.util.Properties
 
+/**
+ * A helper class for load native library publish by `io.otavia.jni.plugin`
+ *
+ * @param nativeLibrary library name.
+ */
 class NativeLoader(nativeLibrary: String) {
   NativeLoader.load(nativeLibrary)
 }
@@ -15,7 +39,7 @@ object NativeLoader {
 
   final def load(nativeLibrary: String): Unit = {
     val lib = System.mapLibraryName(nativeLibrary)
-    val resourcePath = "/" + getCurrentTargetName + "/" + lib
+    val resourcePath = "/native/" + getCurrentTargetName + "/" + lib
 
     if (!loaded.contains(nativeLibrary) && !failure.contains(nativeLibrary)) {
       val tmp: Path = Files.createTempDirectory("rust-jni-")
@@ -45,15 +69,20 @@ object NativeLoader {
     }
   }
 
-  private def getCurrentTargetName: String = Properties.propOrNone("RUN_RUST_TARGET") match {
+  private def getCurrentTargetName: String = Properties.envOrNone("RUN_RUST_TARGET") match {
     case Some(value) => value
     case None => targetName0()
   }
 
   private def targetName0(): String = {
+
     val os = toRustOS(System.getProperty("os.name").toLowerCase)
-    val arch = System.getProperty("os.arch")
-    s"$arch-$os"
+    val arch = toRustArch(System.getProperty("os.arch"))
+    s"$arch$os"
+  }
+
+  private def toRustArch(arch: String): String = {
+    if (arch.contains("amd64")) "x86_64" else arch
   }
 
   private final def toRustOS(os: String): String = {
