@@ -17,8 +17,8 @@ Language: [English](./README.md)
 在您的项目构建文件 `build.sc` 中， 通过如下代码引入插件：
 
 ```scala
-import $ivy.`io.otavia::mill-rust:{version}`
-import io.otavia.jni.plugin.RustJniModule
+import $ivy.`io.github.otavia-projects::mill-rust:{version}`
+import io.github.otavia.jni.plugin.RustJniModule
 ```
 
 然后定义一个 jni 源码模块：

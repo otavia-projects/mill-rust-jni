@@ -15,7 +15,7 @@
  */
 
 
-package io.otavia.jni.plugin
+package io.github.otavia.jni.plugin
 
 import mill._
 import mill.define.Sources

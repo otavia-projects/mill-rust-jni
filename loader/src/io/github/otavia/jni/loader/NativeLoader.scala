@@ -17,7 +17,7 @@
  * BSD-3-Clause license.
  */
 
-package io.otavia.jni.loader
+package io.github.otavia.jni.loader
 
 import java.nio.file.{Files, Path}
 import scala.collection.mutable

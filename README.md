@@ -17,8 +17,8 @@ Language: [简体中文](./README.zh_cn.md)
 In your project build script `build.sc`, import the plugin with the following code:
 
 ```scala
-import $ivy.`io.otavia::mill-rust:{version}`
-import io.otavia.jni.plugin.RustJniModule
+import $ivy.`io.github.otavia-projects::mill-rust:{version}`
+import io.github.otavia.jni.plugin.RustJniModule
 ```
 
 Then define a jni source code module, the module name `libjni` can be anything you like.
@@ -103,7 +103,7 @@ object jni_jvm_interface extends ScalaModule { // jni_jvm_interface is example m
   // if this module is include jni jvm interface, you can also add a loader helper by this project.
   override def ivyDeps: T[Loose.Agg[Dep]] = Agg(
     ivy"{organization}:{artifactId}:{version}", // some dependency
-    ivy"io.otavia::jni-loader:{version}" // loader helper
+    ivy"io.github.otavia::jni-loader:{version}" // loader helper
   )
 
   // use this to dependent local jni module dependencies.
