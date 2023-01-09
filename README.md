@@ -17,7 +17,7 @@ Language: [简体中文](./README.zh_cn.md)
 In your project build script `build.sc`, import the plugin with the following code:
 
 ```scala
-import $ivy.`io.github.otavia-projects::mill-rust:{version}`
+import $ivy.`io.github.otavia-projects::mill-rust_mill$MILL_BIN_PLATFORM:{version}`
 import io.github.otavia.jni.plugin.RustJniModule
 ```
 
@@ -96,14 +96,14 @@ object libjni extends RustJniModule { // You can also extends PublishModule to p
 
 }
 
-object jni_jvm_interface extends ScalaModule { // jni_jvm_interface is example module, it can be  
+object jni_jvm_interface extends ScalaModule { // jni_jvm_interface is example module, it can be anything you like.
   override def scalaVersion = "3.2.1"
 
   // use this to dependent maven central jni module, or other dependencies.
   // if this module is include jni jvm interface, you can also add a loader helper by this project.
   override def ivyDeps: T[Loose.Agg[Dep]] = Agg(
     ivy"{organization}:{artifactId}:{version}", // some dependency
-    ivy"io.github.otavia::jni-loader:{version}" // loader helper
+    ivy"io.github.otavia-projects::jni-loader:{version}" // loader helper
   )
 
   // use this to dependent local jni module dependencies.
@@ -119,7 +119,9 @@ Then define the native methods on the jvm in the jni_jvm_interface module:
 defined by scala
 
 ```scala
-package com.github.example
+package io.github.example
+
+import io.github.otavia.jni.loader.NativeLoader
 
 object RustJNI extends NativeLoader("libjni") {
   @native def add(a: Int, b: Int): Int
@@ -135,10 +137,16 @@ class Adder(val base: Int) extends NativeLoader("libjni") {
 defined by java
 
 ```java
-package com.github.example;
+package io.github.example;
 
-class JavaJNI {
+import io.github.otavia.jni.loader.NativeLoader;
+
+class JavaJNI extends NativeLoader {
     private int base = 0;
+
+    JavaJNI() {
+        super("mionative");
+    }
 
     public static native int add(int a, int b);
 
@@ -156,22 +164,22 @@ use jni::objects::*;
 use jni::sys::*;
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_RustJNI_00024_add(env: JNIEnv, this: jobject, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_RustJNI_00024_add(env: JNIEnv, this: jobject, a: jint, b: jint) -> jint {
     a + b
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_Adder_plus(env: JNIEnv, this: jobject, term: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_Adder_plus(env: JNIEnv, this: jobject, term: jint) -> jint {
     todo!()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_JavaJNI_add(env: JNIEnv, clz: jclass, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_JavaJNI_add(env: JNIEnv, clz: jclass, a: jint, b: jint) -> jint {
     todo!()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_JavaJNI_plus(env: JNIEnv, this: jobject, term: jint) {
+pub unsafe extern "C" fn Java_io_github_example_JavaJNI_plus(env: JNIEnv, this: jobject, term: jint) {
     todo!()
 }
 

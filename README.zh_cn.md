@@ -17,7 +17,7 @@ Language: [English](./README.md)
 在您的项目构建文件 `build.sc` 中， 通过如下代码引入插件：
 
 ```scala
-import $ivy.`io.github.otavia-projects::mill-rust:{version}`
+import $ivy.`io.github.otavia-projects::mill-rust_mill$MILL_BIN_PLATFORM:{version}`
 import io.github.otavia.jni.plugin.RustJniModule
 ```
 
@@ -89,23 +89,23 @@ mill libjni.nativeInit
 使用 jni 生成的库非常简单，例如您有如下构建模块
 
 ```scala
-object libjni extends RustJniModule { // You can also extends PublishModule to publish this library jar to maven central 
+object libjni extends RustJniModule { // 您也可以通过继承 PublishModule 将您的二进制 jar 包发布到 maven 仓库
 
   override def release: Boolean = true
 
 }
 
-object jni_jvm_interface extends ScalaModule { // jni_jvm_interface is example module, it can be  
+object jni_jvm_interface extends ScalaModule { // jni_jvm_interface 是一个示例名称，您可以设置任何合法的名称
   override def scalaVersion = "3.2.1"
 
-  // use this to dependent maven central jni module, or other dependencies.
-  // if this module is include jni jvm interface, you can also add a loader helper by this project.
+  // 使用 ivyDeps 依赖二进制 jar 包， 或其他 jar 包 
+  // 如果您的模块包含 native 方法，您可以使用 jni-loader 轻松加载您的 二进制 jar 包
   override def ivyDeps: T[Loose.Agg[Dep]] = Agg(
-    ivy"{organization}:{artifactId}:{version}", // some dependency
-    ivy"io.otavia::jni-loader:{version}" // loader helper
+    ivy"{organization}:{artifactId}:{version}", // 一些依赖
+    ivy"io.github.otavia-projects::jni-loader:{version}" // jni-loader 依赖
   )
 
-  // use this to dependent local jni module dependencies.
+  // 如果您的二进制模块是本地的，使用 moduleDeps 加入依赖
   override def moduleDeps: scala.Seq[JavaModule] = scala.Seq(libjni)
 
 }
@@ -118,7 +118,9 @@ object jni_jvm_interface extends ScalaModule { // jni_jvm_interface is example m
 使用 scala 定义
 
 ```scala
-package com.github.example
+package io.github.example
+
+import io.github.otavia.jni.loader.NativeLoader
 
 object RustJNI extends NativeLoader("libjni") {
   @native def add(a: Int, b: Int): Int
@@ -134,10 +136,16 @@ class Adder(val base: Int) extends NativeLoader("libjni") {
 使用 java 定义
 
 ```java
-package com.github.example;
+package io.github.example;
 
-class JavaJNI {
+import io.github.otavia.jni.loader.NativeLoader;
+
+class JavaJNI extends NativeLoader {
     private int base = 0;
+
+    JavaJNI() {
+        super("mionative");
+    }
 
     public static native int add(int a, int b);
 
@@ -155,22 +163,22 @@ use jni::objects::*;
 use jni::sys::*;
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_RustJNI_00024_add(env: JNIEnv, this: jobject, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_RustJNI_00024_add(env: JNIEnv, this: jobject, a: jint, b: jint) -> jint {
     a + b
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_Adder_plus(env: JNIEnv, this: jobject, term: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_Adder_plus(env: JNIEnv, this: jobject, term: jint) -> jint {
     todo!()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_JavaJNI_add(env: JNIEnv, clz: jclass, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_JavaJNI_add(env: JNIEnv, clz: jclass, a: jint, b: jint) -> jint {
     todo!()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_com_github_example_JavaJNI_plus(env: JNIEnv, this: jobject, term: jint) {
+pub unsafe extern "C" fn Java_io_github_example_JavaJNI_plus(env: JNIEnv, this: jobject, term: jint) {
     todo!()
 }
 

@@ -1,23 +1,22 @@
 // -*- mode: scala -*-
 
 import mill._, os._, scalalib._, publish._
-import scala.util.Properties
+import mill.scalalib.api.ZincWorkerUtil.scalaNativeBinaryVersion
 
 object meta {
-  val crossVersions = Seq("2.13.8")
+  val millVersions = Seq("0.10.10")
+  val version = "0.1.0"
 
   implicit val wd: Path = pwd
 
-  val MILL_VERSION = Properties.propOrNull("MILL_VERSION")
+  def millBinaryVersion(millVersion: String) = scalaNativeBinaryVersion(millVersion)
 }
 
 object loader extends mill.Cross[Loader]("2.12.12", "2.13.8", "3.2.1")
 
 class Loader(val crossScalaVersion: String) extends CrossScalaModule with PublishModule {
 
-  override def publishVersion: T[String] = T {
-    meta.MILL_VERSION
-  }
+  override def publishVersion: T[String] = meta.version
 
   override def artifactName = "jni-loader"
 
@@ -34,13 +33,16 @@ class Loader(val crossScalaVersion: String) extends CrossScalaModule with Publis
 
 }
 
-object plugin extends mill.Cross[MillPlugin](meta.crossVersions: _*)
+object plugin extends mill.Cross[MillPlugin](meta.millVersions: _*)
 
-class MillPlugin(override val crossScalaVersion: String) extends CrossModuleBase with PublishModule {
+class MillPlugin(millVersion: String) extends CrossModuleBase with PublishModule {
 
-  override def publishVersion = T {
-    meta.MILL_VERSION
-  }
+  override def crossScalaVersion: String = "2.13.8"
+
+  override def artifactSuffix = s"_mill${meta.millBinaryVersion(millVersion)}" + super.artifactSuffix()
+
+  override def publishVersion = meta.version
+
 
   override def artifactName = "mill-rust"
 
@@ -55,7 +57,7 @@ class MillPlugin(override val crossScalaVersion: String) extends CrossModuleBase
     )
   )
 
-  override def compileIvyDeps = Agg(ivy"com.lihaoyi::mill-scalalib:${meta.MILL_VERSION}")
+  override def compileIvyDeps = Agg(ivy"com.lihaoyi::mill-scalalib:$millVersion")
 
 
 }
