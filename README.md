@@ -5,6 +5,9 @@
 <p align=center ><b>A mill plugin for build rust jni code!</b></p>
 
 ![GitHub](https://img.shields.io/github/license/otavia-projects/mill-rust-jni)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.otavia-projects/mill-rust_mill0.10_2.13)
+![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/io.github.otavia-projects/mill-rust_mill0.10_2.13?server=https%3A%2F%2Fs01.oss.sonatype.org)
+![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/io.github.otavia-projects/mill-rust_mill0.10_2.13?server=https%3A%2F%2Fs01.oss.sonatype.org)
 
 <hr>
 
