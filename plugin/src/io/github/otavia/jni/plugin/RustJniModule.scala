@@ -102,7 +102,11 @@ trait RustJniModule extends JavaModule {
 
   /** Rust build target of local computer, you can use the environment variable MILL_RUST_TARGET to set it. */
   def localTarget: String = if (System.getenv("MILL_RUST_TARGET") != null)
-    System.getenv("MILL_RUST_TARGET") else "x86_64-pc-windows-msvc"
+    System.getenv("MILL_RUST_TARGET") else {
+    val os = System.getProperty("os.name").toLowerCase
+    if (os.contains("windows")) "x86_64-pc-windows-msvc" else if (os.contains("linux")) "x86_64-unknown-linux-gnu"
+    else "x86_64-pc-windows-msvc"
+  }
 
   /**
    * All support target of cargo build.
