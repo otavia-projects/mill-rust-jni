@@ -148,7 +148,7 @@ class JavaJNI extends NativeLoader {
     private int base = 0;
 
     JavaJNI() {
-        super("mionative");
+        super("libjni");
     }
 
     public static native int add(int a, int b);
