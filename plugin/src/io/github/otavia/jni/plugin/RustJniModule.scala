@@ -124,7 +124,7 @@ trait RustJniModule extends JavaModule {
 
   private def getNativeLibName(target: String, libraryName: String): String = target match {
     case _: String if target.contains("windows") => libraryName + ".dll"
-    case _: String if target.contains("linux") => libraryName + ".so"
+    case _: String if target.contains("linux") => "lib" + libraryName + ".so"
     case _ => throw new IllegalArgumentException(s"Not support rust target: $target")
   }
 

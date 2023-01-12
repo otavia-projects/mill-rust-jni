@@ -5,7 +5,7 @@ import mill.scalalib.api.ZincWorkerUtil.scalaNativeBinaryVersion
 
 object meta {
   val millVersions = Seq("0.10.10")
-  val version = "0.1.0"
+  val version = "0.1.1-SNAPSHOT"
 
   implicit val wd: Path = pwd
 
