@@ -12,6 +12,10 @@ Language: [简体中文](./README.zh_cn.md)
 
 <hr>
 
+## Example
+
+[rust-scala-demo](https://github.com/yankun1992/rust-scala-demo)
+
 ## Setup
 
 In your project build script `build.sc`, import the plugin with the following code:

@@ -12,6 +12,10 @@ Language: [English](./README.md)
 
 <hr>
 
+## 示例
+
+[rust-scala-demo](https://github.com/yankun1992/rust-scala-demo)
+
 ## 设置
 
 在您的项目构建文件 `build.sc` 中， 通过如下代码引入插件：
