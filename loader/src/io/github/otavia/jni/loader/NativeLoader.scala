@@ -42,35 +42,31 @@ object NativeLoader {
     val resourcePath = "/native/" + getCurrentTargetName + "/" + lib
 
     if (!loaded.contains(nativeLibrary) && !failure.contains(nativeLibrary)) {
-      if (System.getProperty("java.library.path") != null) {
-        try {
-          System.loadLibrary(nativeLibrary)
-        } catch {
-          case ex: Exception =>
-            failure.add(nativeLibrary)
-            throw new UnsatisfiedLinkError("Error while extracting native library: " + ex)
-        }
-      } else {
-        val tmp: Path = Files.createTempDirectory("rust-jni-")
-        val extractedPath = tmp.resolve(lib)
+      val tmp: Path = Files.createTempDirectory("rust-jni-")
+      val extractedPath = tmp.resolve(lib)
 
-        Option(this.getClass.getResourceAsStream(resourcePath)) match {
-          case None =>
-            failure.add(nativeLibrary)
-            throw new UnsatisfiedLinkError(
-              "Native library " + lib + " (" + resourcePath + ") cannot be found on the classpath."
-            )
-          case Some(resourceStream) =>
-            try {
-              Files.copy(resourceStream, extractedPath)
-              System.load(extractedPath.toAbsolutePath.toString)
-            } catch {
-              case ex: Exception =>
-                failure.add(nativeLibrary)
-                throw new UnsatisfiedLinkError("Error while extracting native library: " + ex)
-            }
-            loaded.add(nativeLibrary)
-        }
+      Option(this.getClass.getResourceAsStream(resourcePath)) match {
+        case None =>
+          try {
+            System.loadLibrary(nativeLibrary)
+          } catch {
+            case ex: Exception =>
+              failure.add(nativeLibrary)
+              throw new UnsatisfiedLinkError("Native library " + lib +
+                " (" + resourcePath + ") cannot be found on the classpath." + " And also can't find native library [" +
+                lib + "] from java.library.path " + ex.getMessage)
+          }
+          loaded.add(nativeLibrary)
+        case Some(resourceStream) =>
+          try {
+            Files.copy(resourceStream, extractedPath)
+            System.load(extractedPath.toAbsolutePath.toString)
+          } catch {
+            case ex: Exception =>
+              failure.add(nativeLibrary)
+              throw new UnsatisfiedLinkError("Error while extracting native library: " + ex)
+          }
+          loaded.add(nativeLibrary)
       }
     } else if (failure.contains(nativeLibrary)) {
       throw new UnsatisfiedLinkError(

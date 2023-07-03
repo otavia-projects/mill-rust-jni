@@ -12,7 +12,6 @@ public class NativeLoader {
         NativeLoader.load(library);
     }
 
-
     private static final ConcurrentHashMap<String, Boolean> loaded = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, Boolean> failure = new ConcurrentHashMap<>();
 
@@ -21,41 +20,35 @@ public class NativeLoader {
         String resourcePath = "/native/" + NativeLoader.getCurrentTargetName() + "/" + lib;
 
         if (!loaded.containsKey(library) && !failure.containsKey(library)) {
-            String path = System.getProperty("java.library.path");
-            if (path != null) {
+            Path tmp = Files.createTempDirectory("rust-jni-");
+            Path extractedPath = tmp.resolve(lib);
+            InputStream resourceStream = NativeLoader.class.getResourceAsStream(resourcePath);
+            if (resourceStream == null) {
                 try {
                     System.loadLibrary(library);
+                } catch (Exception ex) {
+                    failure.put(library, true);
+                    throw new UnsatisfiedLinkError("Native library " + lib +
+                            " (" + resourcePath + ") cannot be found on the classpath." +
+                            " And also can't find native library [" + lib +
+                            "] from java.library.path " + ex.getMessage());
+                }
+                loaded.put(library, true);
+            } else {
+                try {
+                    Files.copy(resourceStream, extractedPath);
+                    System.load(extractedPath.toAbsolutePath().toString());
                 } catch (Exception ex) {
                     failure.put(library, true);
                     throw new UnsatisfiedLinkError("Error while extracting native library: " + ex);
                 }
                 loaded.put(library, true);
-            } else {
-                Path tmp = Files.createTempDirectory("rust-jni-");
-                Path extractedPath = tmp.resolve(lib);
-                InputStream resourceStream = lib.getClass().getResourceAsStream(resourcePath);
-                if (resourceStream == null) {
-                    failure.put(library, true);
-                    throw new UnsatisfiedLinkError(
-                            "Native library " + lib + " (" + resourcePath + ") cannot be found on the classpath."
-                    );
-                } else {
-                    try {
-                        Files.copy(resourceStream, extractedPath);
-                        System.load(extractedPath.toAbsolutePath().toString());
-                    } catch (Exception ex) {
-                        failure.put(library, true);
-                        throw new UnsatisfiedLinkError("Error while extracting native library: " + ex);
-                    }
-                    loaded.put(library, true);
-                }
             }
         } else if (failure.containsKey(library)) {
             throw new UnsatisfiedLinkError(
                     "Native library " + lib + " (" + resourcePath + ") cannot be found on the classpath."
             );
         }
-
     }
 
 
