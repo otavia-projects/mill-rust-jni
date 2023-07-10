@@ -132,6 +132,14 @@ trait RustJniModule extends JavaModule {
     case _ => throw new IllegalArgumentException(s"Not support rust target: $target")
   }
 
+  /**
+   * Environment variables used in `cargo build`
+   *
+   * @since 0.2.0
+   *
+   */
+  def cargoBuildEnvs: Map[String, String] = Map.empty
+
   /** Compile rust code. This target result is append to [[resources]] target, so the generated library is in
    * module's classpath. */
   def compileNative = T {
@@ -142,9 +150,9 @@ trait RustJniModule extends JavaModule {
 
     for (target <- crossTargets) {
       if (release)
-        os.proc("cargo", "build", "--release", "--target", target).call(cwd = crateHome)
+        os.proc("cargo", "build", "--release", "--target", target).call(cwd = crateHome, env = cargoBuildEnvs)
       else
-        os.proc("cargo", "build", "--target", target).call(cwd = crateHome)
+        os.proc("cargo", "build", "--target", target).call(cwd = crateHome, env = cargoBuildEnvs)
 
       val mode = if (release) "release" else "debug"
       val name = getNativeLibName(target, nativeName())
