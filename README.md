@@ -65,6 +65,7 @@ The `RustJniModule` contains several special definitions that you can override.
 |-------------------|-------------------------------------------------------------------------------------------|
 | defaultNativeName | Define the jni library name for the `nativeInit` command to generate the project template |
 | release           | Define cargo build mode                                                                   |
+| cargoBuildEnvs    | Environment variables used in `cargo build`. Since 0.2.0                                  | 
 
 Also contains the following commands or targets.
 

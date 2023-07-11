@@ -65,6 +65,7 @@ mill libjni.nativeInit
 |-------------------|----------------------------------|
 | defaultNativeName | 定义 jni 库名，用于 nativeInit 命令生成项目模板 |
 | release           | 定义 cargo 构建模式                    |
+| cargoBuildEnvs    | 用于 `cargo build` 命令的环境变量         |
 
 还包含以下命令或目标：
 
