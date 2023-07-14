@@ -1,4 +1,4 @@
-package com.icksys.jni;
+package io.github.otavia.jni.loader;
 
 import java.io.IOException;
 import java.io.InputStream;
