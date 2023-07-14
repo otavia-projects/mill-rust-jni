@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '8'
       - run: chmod +x millw
       - run: echo $SONATYPE_EXPORT | base64 --decode > sonatype.sh
       - run: echo $PGP_SECRET | base64 --decode > gpg_key && gpg --import --no-tty --batch --yes gpg_key
