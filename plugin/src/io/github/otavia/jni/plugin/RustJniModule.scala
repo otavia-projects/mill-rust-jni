@@ -77,7 +77,7 @@ trait RustJniModule extends JavaModule {
            |edition = "2021"
            |
            |[dependencies]
-           |jni = "0.20"
+           |jni = "0.21"
            |
            |[lib]
            |crate_type = ["cdylib"]""".stripMargin

@@ -172,22 +172,22 @@ use jni::objects::*;
 use jni::sys::*;
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_io_github_example_RustJNI_00024_add(env: JNIEnv, this: jobject, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_RustJNI_00024_add<'local>(mut env: JNIEnv<'local>, this: JObject<'local>, a: jint, b: jint) -> jint {
     a + b
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_io_github_example_Adder_plus(env: JNIEnv, this: jobject, term: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_Adder_plus<'local>(mut env: JNIEnv<'local>, this: JObject<'local>, term: jint) -> jint {
     todo!()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_io_github_example_JavaJNI_add(env: JNIEnv, clz: jclass, a: jint, b: jint) -> jint {
+pub unsafe extern "C" fn Java_io_github_example_JavaJNI_add<'local>(mut env: JNIEnv<'local>, clz: JClass<'local>, a: jint, b: jint) -> jint {
     todo!()
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn Java_io_github_example_JavaJNI_plus(env: JNIEnv, this: jobject, term: jint) {
+pub unsafe extern "C" fn Java_io_github_example_JavaJNI_plus<'local>(mut env: JNIEnv<'local>, this: JObject<'local>, term: jint) {
     todo!()
 }
 
