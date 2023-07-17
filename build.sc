@@ -5,7 +5,7 @@ import mill.scalalib.api.ZincWorkerUtil.scalaNativeBinaryVersion
 
 object meta {
   val millVersions = Seq("0.10.12", "0.11.1")
-  val version = "0.2.1-SNAPSHOT"
+  val version = "0.2.1"
 
   def millBinaryVersion(millVersion: String) = scalaNativeBinaryVersion(millVersion)
 }
