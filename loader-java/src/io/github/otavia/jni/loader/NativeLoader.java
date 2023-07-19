@@ -68,8 +68,10 @@ public class NativeLoader {
     }
 
     private static String toRustArch(String arch) {
-        if (arch.contains("amd64")) {
+        if (arch.matches("^(x8664|amd64|ia32e|em64t|x64)$")) {
             return "x86_64";
+        } else if (arch.trim().equals("aarch64")) {
+            return "aarch64";
         } else {
             return arch;
         }
@@ -80,6 +82,8 @@ public class NativeLoader {
             return "-pc-windows-msvc";
         } else if (os.contains("linux")) {
             return "-unknown-linux-gnu";
+        } else if (os.startsWith("macosx") || os.startsWith("osx") || os.startsWith("darwin")) {
+            return "-apple-darwin";
         } else {
             return os;
         }
