@@ -105,6 +105,11 @@ trait RustJniModule extends JavaModule {
     System.getenv("MILL_RUST_TARGET") else {
     val os = System.getProperty("os.name").toLowerCase
     if (os.contains("windows")) "x86_64-pc-windows-msvc" else if (os.contains("linux")) "x86_64-unknown-linux-gnu"
+    else if (os.startsWith("macosx") || os.startsWith("osx") || os.startsWith("darwin")) {
+      val arch = System.getProperty("os.arch")
+      if (arch.matches("^(x8664|amd64|ia32e|em64t|x64)$")) "x86_64"
+      else if (arch.trim == "aarch64") "aarch64"
+    } + "-apple-darwin"
     else "x86_64-pc-windows-msvc"
   }
 
@@ -129,6 +134,7 @@ trait RustJniModule extends JavaModule {
   private def getNativeLibName(target: String, libraryName: String): String = target match {
     case _: String if target.contains("windows") => libraryName + ".dll"
     case _: String if target.contains("linux") => "lib" + libraryName + ".so"
+    case _: String if target.contains("apple") => "lib" + libraryName + ".dylib"
     case _ => throw new IllegalArgumentException(s"Not support rust target: $target")
   }
 
