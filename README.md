@@ -69,14 +69,15 @@ The `RustJniModule` contains several special definitions that you can override.
 
 Also contains the following commands or targets.
 
-| Definition     | Description                                                                                                                                          |
-|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| nativeName     | jni library name, parsed from Cargo.toml [package].name                                                                                              |
-| rustSourceRoot | rust source code root, i.e. {module}/native                                                                                                          |
-| localTarget    | The rust target that can be run on the current computer, set using the environment variable MILL_RUST_TARGET                                         |
-| crossTargets   | The targets supported by rust cross-compilation are set using the environment variable MILL_CROSS_RUST_TARGET, with a comma separating the targets   |
-| compileNative  | Compiling rust code                                                                                                                                  |
-| resources      | The output of `compileNative` is appended to `resources`, so the resulting binary library is automatically included in the module's `localClasspath` |
+| Definition           | Description                                                                                                                                                                      |
+|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| nativeName           | jni library name, parsed from Cargo.toml [package].name                                                                                                                          |
+| rustSourceRoot       | rust source code root, i.e. {module}/native                                                                                                                                      |
+| localTarget          | The rust target that can be run on the current computer, set using the environment variable MILL_RUST_TARGET                                                                     |
+| crossTargets         | The targets supported by rust cross-compilation are set using the environment variable MILL_CROSS_RUST_TARGET, with a comma separating the targets                               |
+| compileNative        | Compiling rust code                                                                                                                                                              |
+| otherNativeLibraries | Other exists native library, must contains `native` dir in it.                                                                                                                   |
+| resources            | The output of `compileNative` and `otherNativeLibraries` are appended to `resources`, so the resulting binary library is automatically included in the module's `localClasspath` |
 
 ## Building jar packages
 

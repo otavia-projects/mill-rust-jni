@@ -18,7 +18,6 @@
 package io.github.otavia.jni.plugin
 
 import mill._
-import mill.define.Sources
 import mill.scalalib.JavaModule
 
 /**
@@ -173,9 +172,17 @@ trait RustJniModule extends JavaModule {
     PathRef(T.dest)
   }
 
+  /**
+   * Other exists native library, must contains `native` dir in it.
+   *
+   * e.g. value `./library` the inner maybe ./library/native/aarch64-apple-darwin
+   *
+   * @return
+   */
+  def otherNativeLibraries: Seq[PathRef] = Seq.empty
 
-  override def resources: Sources = T.sources {
-    super.resources().++(Seq(compileNative()))
+  override def resources = T.sources {
+    super.resources().++(Seq(compileNative())).++(otherNativeLibraries)
   }
 
   /** cargo clean */

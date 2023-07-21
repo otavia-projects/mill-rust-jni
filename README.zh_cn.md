@@ -69,14 +69,15 @@ mill libjni.nativeInit
 
 还包含以下命令或目标：
 
-| 定义             | 描述                                                                      |
-|----------------|-------------------------------------------------------------------------|
-| nativeName     | jni 库名， 从 Cargo.toml [package].name 解析                                  |
-| rustSourceRoot | rust 源码根目录，即 {module}/native                                            |
-| localTarget    | 当前计算机可运行的 rust target ， 使用环境变量 MILL_RUST_TARGET 设置                      |
-| crossTargets   | rust 交叉编译支持的 target，使用环境变量 MILL_CROSS_RUST_TARGET 设置，各 target之间使用逗号分割   |
-| compileNative  | 编译 rust 代码                                                              |
-| resources      | compileNative 的输出结果追加在  resources 中， 所以生成的二进制库自动包含在模块的 localClasspath 中 |
+| 定义                   | 描述                                                                                             |
+|----------------------|------------------------------------------------------------------------------------------------|
+| nativeName           | jni 库名， 从 Cargo.toml [package].name 解析                                                         |
+| rustSourceRoot       | rust 源码根目录，即 {module}/native                                                                   |
+| localTarget          | 当前计算机可运行的 rust target ， 使用环境变量 MILL_RUST_TARGET 设置                                             |
+| crossTargets         | rust 交叉编译支持的 target，使用环境变量 MILL_CROSS_RUST_TARGET 设置，各 target之间使用逗号分割                          |
+| compileNative        | 编译 rust 代码                                                                                     |
+| otherNativeLibraries | 需要被jar包包含的其他库,文件夹内必须包含 `native` 目录                                                             |
+| resources            | compileNative 和 otherNativeLibraries 的输出结果追加在  resources 中， 所以生成的二进制库自动包含在模块的 localClasspath 中 |
 
 ## 构建 jar 包
 
