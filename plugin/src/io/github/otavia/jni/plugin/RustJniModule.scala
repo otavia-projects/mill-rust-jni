@@ -102,9 +102,9 @@ trait RustJniModule extends JavaModule {
   /** Rust build target of local computer, you can use the environment variable MILL_RUST_TARGET to set it. */
   def localTarget: String = if (System.getenv("MILL_RUST_TARGET") != null)
     System.getenv("MILL_RUST_TARGET") else {
-    val os = System.getProperty("os.name").toLowerCase
+    val os = System.getProperty("os.name").toLowerCase.replace(" ", "")
     if (os.contains("windows")) "x86_64-pc-windows-msvc" else if (os.contains("linux")) "x86_64-unknown-linux-gnu"
-    else if (os.startsWith("macosx") || os.startsWith("osx") || os.startsWith("darwin")) {
+    else if (os.contains("macosx") || os.contains("osx") || os.contains("darwin")) {
       val arch = System.getProperty("os.arch")
       if (arch.matches("^(x8664|amd64|ia32e|em64t|x64)$")) "x86_64"
       else if (arch.trim == "aarch64") "aarch64"

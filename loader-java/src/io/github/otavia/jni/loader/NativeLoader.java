@@ -62,7 +62,7 @@ public class NativeLoader {
     }
 
     private static String targetName0() {
-        String os = toRustOS(System.getProperty("os.name").toLowerCase());
+        String os = toRustOS(System.getProperty("os.name").toLowerCase().replace(" ", ""));
         String arch = toRustArch(System.getProperty("os.arch"));
         return arch + os;
     }
@@ -82,7 +82,7 @@ public class NativeLoader {
             return "-pc-windows-msvc";
         } else if (os.contains("linux")) {
             return "-unknown-linux-gnu";
-        } else if (os.startsWith("macosx") || os.startsWith("osx") || os.startsWith("darwin")) {
+        } else if (os.contains("macosx") || os.contains("osx") || os.contains("darwin")) {
             return "-apple-darwin";
         } else {
             return os;

@@ -82,7 +82,7 @@ object NativeLoader {
 
   private def targetName0(): String = {
 
-    val os = toRustOS(System.getProperty("os.name").toLowerCase)
+    val os = toRustOS(System.getProperty("os.name").toLowerCase.replace(" ", ""))
     val arch = toRustArch(System.getProperty("os.arch"))
     s"$arch$os"
   }
@@ -96,7 +96,7 @@ object NativeLoader {
   private final def toRustOS(os: String): String = {
     if (os.contains("windows")) "-pc-windows-msvc"
     else if (os.contains("linux")) "-unknown-linux-gnu"
-    else if (os.startsWith("macosx") || os.startsWith("osx") || os.startsWith("darwin")) "-apple-darwin"
+    else if (os.contains("macosx") || os.contains("osx") || os.contains("darwin")) "-apple-darwin"
     else os
   }
 
