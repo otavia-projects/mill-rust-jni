@@ -48,7 +48,7 @@ trait Loader extends CrossScalaModule with PublishModule {
 
 }
 
-object plugin extends mill.Cross[MillPlugin]("0.10.12", "0.11.13", "0.12.12")
+object plugin extends mill.Cross[MillPlugin]("0.10.12", "0.11.13", "0.12.14")
 
 trait MillPlugin extends CrossModuleBase with PublishModule {
 
